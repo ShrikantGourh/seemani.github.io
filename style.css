@@ -1,0 +1,75 @@
+body {
+  margin: 0;
+  background: linear-gradient(135deg, #020024, #090979, #000);
+  font-family: Arial, sans-serif;
+  color: white;
+}
+
+.container {
+  min-height: 100vh;
+  text-align: center;
+  padding: 40px 20px;
+}
+
+.logo {
+  width: 140px;
+  border-radius: 50%;
+  margin-top: 40px;
+}
+
+h1 {
+  color: gold;
+  font-size: 42px;
+  margin: 10px 0;
+}
+
+.tagline {
+  color: #ddd;
+  letter-spacing: 1px;
+}
+
+h2 {
+  margin-top: 40px;
+  color: gold;
+  font-size: 28px;
+}
+
+.desc {
+  margin: 20px 0;
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+.buttons {
+  margin: 30px 0;
+}
+
+.btn {
+  display: inline-block;
+  margin: 10px;
+  padding: 12px 25px;
+  text-decoration: none;
+  font-weight: bold;
+  border-radius: 30px;
+  transition: 0.3s;
+}
+
+.insta {
+  background: #e1306c;
+  color: white;
+}
+
+.whatsapp {
+  background: #25d366;
+  color: black;
+}
+
+.btn:hover {
+  transform: scale(1.05);
+}
+
+.footer {
+  margin-top: 50px;
+  font-size: 13px;
+  opacity: 0.7;
+}
