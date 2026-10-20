@@ -1,5 +1,17 @@
 [
   {
+    "id": "personal-message-song",
+    "title": "Personal Message + Song",
+    "category": "love",
+    "description": "Create a shareable message for someone special, with an optional YouTube song dedication.",
+    "priceLabel": "Free",
+    "badge": "NEW",
+    "emoji": "💌",
+    "theme": "love",
+    "url": "/gift/",
+    "status": "available"
+  },
+  {
     "id": "birthday-surprise",
     "title": "Birthday Surprise",
     "category": "birthday",
