@@ -112,7 +112,7 @@
       });
       const data = await response.json();
       if (!response.ok || !data.ok) throw new Error(data.error || "Could not create your gift");
-      const shareUrl = new URL("https://seemani.in/gift/");
+      const shareUrl = new URL("https://seemani-github-io.shrikantgrh.workers.dev/gift/");
       shareUrl.searchParams.set("id", data.id);
       document.getElementById("shareUrl").value = shareUrl.toString();
       document.getElementById("openGift").href = shareUrl.toString();
