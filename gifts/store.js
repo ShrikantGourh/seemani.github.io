@@ -28,9 +28,10 @@
     const label = product.badge || product.category;
     const url = sitePath(product.url || "mailto:hello@seemani.in");
     const action = available ? "Create your gift" : (product.status === "preview" ? "Ask about this gift" : "Coming soon");
-    return `<article class="product-card">
+    const image = product.image ? `<img class="product-image" src="${escapeHTML(product.image)}" alt="" loading="lazy" onerror="this.remove()">` : "";
+    return `<article class="product-card" style="animation-delay:${Math.min(index*70,420)}ms">
       <div class="product-art" style="background:linear-gradient(135deg,${colors[0]},${colors[1]})">
-        <span class="product-label">${escapeHTML(label)}</span><span class="product-emoji" aria-hidden="true">${escapeHTML(product.emoji || "🎁")}</span>
+        ${image}<span class="product-label">${escapeHTML(label)}</span><span class="product-emoji" aria-hidden="true">${escapeHTML(product.emoji || "🎁")}</span>
       </div>
       <div class="product-info"><h3>${escapeHTML(product.title)}</h3><p>${escapeHTML(product.description)}</p>
         <div class="product-bottom"><span class="price ${product.priceLabel === "Free" ? "free" : ""}">${escapeHTML(product.priceLabel || "Explore")}</span>
