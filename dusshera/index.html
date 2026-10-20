@@ -61,6 +61,15 @@
     .dussehra-story{box-shadow:0 18px 70px #08051c66}
     @media(prefers-reduced-motion:reduce){#dussehra-fireworks-canvas{display:none}}
   </style>
+
+  <style id="dussehra-background-video-style">
+    #dussehra-background-video{position:fixed;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;pointer-events:none;opacity:.34;filter:saturate(1.12) contrast(1.05)}
+    body{background:linear-gradient(180deg,rgba(17,12,37,.58),rgba(20,10,30,.74))!important}
+    #dussehra-fireworks-canvas{z-index:2!important}
+    body>*:not(#dussehra-fireworks-canvas):not(#dussehra-background-video){position:relative;z-index:1}
+    @media(max-width:640px){#dussehra-background-video{opacity:.25}}
+    @media(prefers-reduced-motion:reduce){#dussehra-background-video{display:none}}
+  </style>
 </head>
 <body>
   <header class="topbar">
@@ -234,6 +243,7 @@ const originalSubmit=document.getElementById('dussehra-form');originalSubmit?.ad
 </script>
   <script src="gifts/store.js" defer></script>
 
+  <video id="dussehra-background-video" autoplay muted loop playsinline preload="metadata" aria-hidden="true"><source src="https://raw.githubusercontent.com/ShrikantGourh/seemani.github.io/main/serverless/gemini_generated_video_44ff2274.mp4" type="video/mp4"></video>
   <canvas id="dussehra-fireworks-canvas" aria-hidden="true"></canvas>
   <script id="dussehra-fireworks-animation">
   (()=>{
