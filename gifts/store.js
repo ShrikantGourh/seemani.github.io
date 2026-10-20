@@ -22,7 +22,7 @@
     return prefix + path;
   }
 
-  function card(product) {
+  function card(product, index) {
     const colors = palettes[product.theme] || palettes.birthday;
     const available = product.status === "available";
     const label = product.badge || product.category;
@@ -43,9 +43,9 @@
     const term = search.value.trim().toLowerCase();
     const visible = products.filter(p => (category === "all" || p.category === category) &&
       [p.title, p.description, p.category, p.badge].some(v => String(v || "").toLowerCase().includes(term)));
-    grid.innerHTML = visible.length ? visible.map(card).join("") :
+    grid.innerHTML = visible.length ? visible.map((product,index) => card(product,index)).join("") :
       '<div class="empty-state">No gifts match that search yet. Try another word or choose “All gifts”.</div>';
-    note.textContent = products.length ? "New ideas and thoughtful surprises will be added as Seemani grows." : "We couldn't load the catalogue. Please refresh the page.";
+    note.textContent = products.length ? "For the words you keep in your heart and the moments you wish could last forever. ♡" : "We couldn't load the catalogue. Please refresh the page.";
   }
 
   filters.forEach(button => button.addEventListener("click", () => {
