@@ -15,6 +15,37 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="gifts/store.css">
+  <style id="dussehra-gif-layout-hotfix">
+    /* A shared GIF wish is a static card layout, never the scroll-stage overlay. */
+    #dussehra-story.gif-wish .dussehra-sticky {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    #dussehra-story.gif-wish .dussehra-comic,
+    #dussehra-story.gif-wish.is-wish .dussehra-comic {
+      position: relative !important;
+      inset: auto !important;
+      left: auto !important;
+      right: auto !important;
+      bottom: auto !important;
+      transform: none !important;
+      float: none !important;
+      flex: 0 1 auto;
+      width: min(620px, 100%) !important;
+      max-width: 100% !important;
+      margin: 0 auto !important;
+      box-sizing: border-box;
+      align-self: center;
+    }
+    #dussehra-story.gif-wish .dussehra-from-plaque,
+    #dussehra-story.gif-wish.is-wish .dussehra-from-plaque {
+      display: none !important;
+    }
+  </style>
 </head>
 <body>
   <header class="topbar">
