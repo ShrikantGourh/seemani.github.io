@@ -1,0 +1,74 @@
+[
+  {
+    "id": "birthday-surprise",
+    "title": "Birthday Surprise",
+    "category": "birthday",
+    "description": "A joyful birthday page with a reveal, a heartfelt message and celebratory details.",
+    "priceLabel": "Free to try",
+    "badge": "MOST LOVED",
+    "emoji": "🎂",
+    "theme": "birthday",
+    "url": "/digitalgift/",
+    "status": "available"
+  },
+  {
+    "id": "love-letter",
+    "title": "A Letter From the Heart",
+    "category": "love",
+    "description": "Turn the words you mean into a lovely digital letter they can keep close.",
+    "priceLabel": "Free",
+    "badge": "SWEET & SIMPLE",
+    "emoji": "💌",
+    "theme": "love",
+    "url": "mailto:hello@seemani.in?subject=Love%20letter%20gift",
+    "status": "preview"
+  },
+  {
+    "id": "photo-memories",
+    "title": "Our Little Memories",
+    "category": "memories",
+    "description": "A photo-led story for favourite moments, inside jokes and shared memories.",
+    "priceLabel": "Coming soon",
+    "badge": "PHOTO STORY",
+    "emoji": "📸",
+    "theme": "memories",
+    "url": "mailto:hello@seemani.in?subject=Photo%20memories%20gift",
+    "status": "coming-soon"
+  },
+  {
+    "id": "anniversary",
+    "title": "Anniversary Glow",
+    "category": "love",
+    "description": "A thoughtful little celebration of your story and the moments that made it yours.",
+    "priceLabel": "Coming soon",
+    "badge": "FOR TWO",
+    "emoji": "💗",
+    "theme": "anniversary",
+    "url": "mailto:hello@seemani.in?subject=Anniversary%20gift",
+    "status": "coming-soon"
+  },
+  {
+    "id": "friendship-quiz",
+    "title": "How Well Do You Know Me?",
+    "category": "family",
+    "description": "A playful quiz gift for friends, siblings and the people who know all your stories.",
+    "priceLabel": "Coming soon",
+    "badge": "PLAY TOGETHER",
+    "emoji": "🎲",
+    "theme": "friends",
+    "url": "mailto:hello@seemani.in?subject=Friendship%20quiz%20gift",
+    "status": "coming-soon"
+  },
+  {
+    "id": "family-thank-you",
+    "title": "A Little Thank You",
+    "category": "family",
+    "description": "A warm digital note for parents, siblings and the people who are always there.",
+    "priceLabel": "Free",
+    "badge": "JUST BECAUSE",
+    "emoji": "🌷",
+    "theme": "family",
+    "url": "mailto:hello@seemani.in?subject=Thank%20you%20gift",
+    "status": "preview"
+  }
+]
