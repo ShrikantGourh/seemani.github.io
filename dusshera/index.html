@@ -53,6 +53,14 @@
     .dussehra-story{display:block!important;margin-top:18px}
     main{min-height:100vh;padding-bottom:40px}
   </style>
+
+  <style id="dussehra-fireworks-style">
+    #dussehra-fireworks-canvas{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;opacity:.82}
+    body{position:relative;isolation:isolate;background:radial-gradient(ellipse at 50% 0%,#30265a 0%,#17122c 58%,#100d22 100%)!important}
+    body>*:not(#dussehra-fireworks-canvas){position:relative;z-index:1}
+    .dussehra-story{box-shadow:0 18px 70px #08051c66}
+    @media(prefers-reduced-motion:reduce){#dussehra-fireworks-canvas{display:none}}
+  </style>
 </head>
 <body>
   <header class="topbar">
@@ -225,5 +233,19 @@ const originalSubmit=document.getElementById('dussehra-form');originalSubmit?.ad
 (()=>{const stage=document.querySelector('.dussehra-ravana'),heads=document.getElementById('dussehra-heads'),arrow=document.getElementById('dussehra-arrow'),bubble=document.getElementById('dussehra-comic');if(!stage||!heads||!arrow||!bubble)return;arrow.classList.add('flying-arrow');bubble.classList.add('speech-bubble');bubble.querySelector('strong')?.classList.add('bubble-text');bubble.querySelector('small')?.classList.add('bubble-from');let triggered=false,timers=[];function reset(){timers.forEach(clearTimeout);timers=[];triggered=false;heads.classList.remove('fallen');arrow.classList.remove('shoot');arrow.style.opacity='';bubble.classList.remove('show')}function trigger(){if(triggered)return;triggered=true;timers.push(setTimeout(()=>arrow.classList.add('shoot'),200));timers.push(setTimeout(()=>{heads.classList.add('fallen');arrow.style.opacity='0'},900));timers.push(setTimeout(()=>{heads.classList.remove('fallen');bubble.classList.remove('hidden');bubble.classList.add('show')},2200))}const observer=new IntersectionObserver(entries=>{for(const entry of entries){if(entry.isIntersecting&&entry.boundingClientRect.top<innerHeight*.6)trigger()}},{threshold:.05});observer.observe(stage);document.getElementById('dussehra-form')?.addEventListener('submit',reset)})();
 </script>
   <script src="gifts/store.js" defer></script>
+
+  <canvas id="dussehra-fireworks-canvas" aria-hidden="true"></canvas>
+  <script id="dussehra-fireworks-animation">
+  (()=>{
+    const canvas=document.getElementById('dussehra-fireworks-canvas');if(!canvas||window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+    const ctx=canvas.getContext('2d');if(!ctx)return;let w=0,h=0,dpr=1,rockets=[],sparks=[],lastLaunch=0;
+    const colors=['#ffcf70','#ff729d','#8ee8ff','#d8a0ff','#fff3c4','#ff8b55'];
+    function resize(){dpr=Math.min(window.devicePixelRatio||1,2);w=innerWidth;h=innerHeight;canvas.width=Math.round(w*dpr);canvas.height=Math.round(h*dpr);canvas.style.width=w+'px';canvas.style.height=h+'px';ctx.setTransform(dpr,0,0,dpr,0,0)}
+    function launch(){const x=w*(.12+Math.random()*.76),targetY=h*(.12+Math.random()*.42);rockets.push({x,y:h+8,vx:(Math.random()-.5)*1.5,vy:-(5+Math.random()*2),targetY,color:colors[Math.floor(Math.random()*colors.length)]})}
+    function burst(x,y,color){const n=45+Math.floor(Math.random()*35);for(let i=0;i<n;i++){const a=Math.random()*Math.PI*2,s=1+Math.random()*4.2;sparks.push({x,y,vx:Math.cos(a)*s,vy:Math.sin(a)*s,life:45+Math.random()*35,max:80,size:1+Math.random()*2.1,color,twinkle:Math.random()})}}
+    function frame(t){ctx.clearRect(0,0,w,h);if(t-lastLaunch>650+Math.random()*600){launch();lastLaunch=t}rockets=rockets.filter(r=>{r.x+=r.vx;r.y+=r.vy;r.vy+=.035;ctx.beginPath();ctx.arc(r.x,r.y,2.1,0,Math.PI*2);ctx.fillStyle=r.color;ctx.shadowBlur=12;ctx.shadowColor=r.color;ctx.fill();ctx.shadowBlur=0;if(r.y<=r.targetY||r.vy>=-.2){burst(r.x,r.y,r.color);return false}return true});sparks=sparks.filter(p=>{p.x+=p.vx;p.y+=p.vy;p.vx*=.985;p.vy=p.vy*.985+.045;p.life--;const alpha=Math.max(0,p.life/p.max);ctx.globalAlpha=alpha;ctx.beginPath();ctx.arc(p.x,p.y,p.size*(.6+p.twinkle*.5),0,Math.PI*2);ctx.fillStyle=p.color;ctx.shadowBlur=8;ctx.shadowColor=p.color;ctx.fill();ctx.shadowBlur=0;return p.life>0});ctx.globalAlpha=1;requestAnimationFrame(frame)}
+    resize();window.addEventListener('resize',resize,{passive:true});requestAnimationFrame(frame);
+  })();
+  <\/script>
 </body>
 </html>
