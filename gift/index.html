@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#fff4f6">
+<meta name="description" content="Create a personal digital gift with a heartfelt message and an optional YouTube song dedication.">
+<title>Create a Digital Gift | Seemani</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+<style>
+:root{--rose:#c94f70;--deep:#85334e;--pink:#fff0f2;--cream:#fffdf8;--ink:#4b3038;--muted:#8e6d76;--line:#efd9df}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 50% 0,#fffdf8,#fff0f3 62%,#f7e4e9);font-family:"DM Sans",sans-serif;color:var(--ink)}.wrap{width:min(100% - 30px,720px);margin:auto;padding:32px 0 50px}.brand{text-align:center;color:var(--rose);font-weight:700;letter-spacing:.16em;text-transform:uppercase;font-size:.75rem}h1,h2{font-family:"Playfair Display",serif;color:var(--deep)}h1{text-align:center;font-size:clamp(2.1rem,7vw,3.4rem);margin:14px 0 10px}.intro{text-align:center;color:var(--muted);line-height:1.7;max-width:520px;margin:0 auto 25px}.card{background:#fffdfb;border:1px solid var(--line);border-radius:20px;padding:clamp(20px,5vw,34px);box-shadow:0 18px 45px #a9516b12}.grid{display:grid;gap:16px}label{display:block;font-size:.85rem;font-weight:700;color:#8c5d6a}input,textarea{font:inherit;display:block;width:100%;margin-top:7px;padding:13px;border:1px solid #e9cbd3;border-radius:11px;background:white;color:var(--ink)}textarea{min-height:140px;resize:vertical}.help{font-size:.8rem;color:var(--muted);line-height:1.55;margin:7px 0 0}.btn{border:0;border-radius:999px;padding:14px 20px;background:var(--rose);color:white;font:inherit;font-weight:700;cursor:pointer;box-shadow:0 8px 18px #c94f7028}.btn:disabled{opacity:.55;cursor:wait}.status{padding:12px;border-radius:10px;background:#fff0f2;color:var(--deep);line-height:1.5;display:none;overflow-wrap:anywhere}.status.show{display:block}.result{display:none;margin-top:18px}.result.show{display:block}.sharebox{display:flex;gap:8px;margin-top:10px}.sharebox input{margin:0;min-width:0}.preview{border-top:1px solid var(--line);margin-top:22px;padding-top:20px}.preview h2{margin-top:0}.song{margin-top:20px}.song iframe{width:100%;aspect-ratio:16/9;border:0;border-radius:12px}.song[hidden]{display:none}.notice{font-size:.78rem;line-height:1.6;color:var(--muted);margin-top:20px}a{color:var(--deep)}.back{text-align:center;margin-top:24px}.back a{color:var(--deep)}.hp{position:absolute;left:-10000px;width:1px;height:1px;overflow:hidden}@media(min-width:620px){.grid.two{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+<main class="wrap">
+  <div class="brand">Seemani · made with love</div>
+  <h1>A little gift, just for you ♡</h1>
+  <p class="intro">Create a personal page for someone special. Add a heartfelt note and, if you like, a YouTube song dedication.</p>
+  <section class="card" id="creatorCard">
+    <form class="grid" id="giftForm">
+      <div class="grid two">
+        <label>Who is this for? <input name="recipient" maxlength="70" required placeholder="e.g. Priya"></label>
+        <label>From whom? <input name="sender" maxlength="70" required placeholder="e.g. Your favourite person"></label>
+      </div>
+      <label>Your message <textarea name="message" maxlength="1400" required placeholder="Write something heartfelt..."></textarea></label>
+      <label>Song dedication (optional) — YouTube URL <input name="songUrl" type="url" maxlength="500" placeholder="https://www.youtube.com/watch?v=..."></label>
+      <p class="help">We embed the official YouTube player; Seemani does not upload or host the song. Videos may have ads or playback restrictions.</p>
+      <label class="hp" aria-hidden="true">Leave this field empty<input name="website" tabindex="-1" autocomplete="off"></label>
+      <button class="btn" id="createBtn" type="submit">Create my shareable gift ✨</button>
+      <div class="status" id="status" role="status" aria-live="polite"></div>
+      <div class="result" id="result">
+        <strong>Your gift link is ready 💌</strong>
+        <div class="sharebox"><input id="shareUrl" readonly aria-label="Shareable gift URL"><button class="btn" id="copyBtn" type="button">Copy</button></div>
+        <p class="help">Anyone with this link can view the gift. Share it only with the intended recipient.</p>
+        <p><a id="openGift" href="#">Open your gift ↗</a></p>
+      </div>
+    </form>
+  </section>
+  <section class="card preview" id="giftView" hidden>
+    <div class="brand">A message from the heart</div>
+    <h2 id="viewTitle">A little gift ♡</h2>
+    <p id="viewMessage" style="white-space:pre-line;line-height:1.85"></p>
+    <p id="viewSignoff" style="color:var(--rose);font-family:'Playfair Display',serif;font-size:1.2rem"></p>
+    <div class="song" id="songPlayer" hidden></div>
+  </section>
+  <p class="notice">Gift pages are unlisted, not private. Avoid sensitive personal information. YouTube content is played by YouTube's official player. Read the <a href="https://www.youtube.com/t/terms">YouTube Terms</a>.</p>
+  <div class="back"><a href="https://seemani.in/">← Back to Seemani</a></div>
+</main>
+<script>
+  // Replace this after deploying the Worker in /serverless.
+  const API_BASE = "https://REPLACE-WITH-YOUR-WORKER.workers.dev";
+  const form = document.getElementById("giftForm");
+  const statusBox = document.getElementById("status");
+  const result = document.getElementById("result");
+  const createBtn = document.getElementById("createBtn");
+  function showStatus(message, isError=false) {
+    statusBox.textContent = message;
+    statusBox.style.background = isError ? "#fff0f0" : "#fff0f2";
+    statusBox.classList.add("show");
+  }
+  function youtubeEmbed(videoId) {
+    const frame = document.createElement("iframe");
+    frame.src = "https://www.youtube-nocookie.com/embed/" + encodeURIComponent(videoId);
+    frame.title = "YouTube song dedication";
+    frame.loading = "lazy";
+    frame.referrerPolicy = "strict-origin-when-cross-origin";
+    frame.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
+    frame.allowFullscreen = true;
+    return frame;
+  }
+  async function loadGift(id) {
+    document.getElementById("creatorCard").hidden = true;
+    document.getElementById("giftView").hidden = false;
+    try {
+      const response = await fetch(API_BASE + "/api/gifts/" + encodeURIComponent(id));
+      const data = await response.json();
+      if (!response.ok || !data.ok) throw new Error(data.error || "Gift not found");
+      const gift = data.gift;
+      document.getElementById("viewTitle").textContent = "A little gift for " + gift.recipient + " ♡";
+      document.getElementById("viewMessage").textContent = gift.message;
+      document.getElementById("viewSignoff").textContent = "With love, " + gift.sender;
+      if (gift.youtubeVideoId) {
+        const player = document.getElementById("songPlayer");
+        player.replaceChildren(youtubeEmbed(gift.youtubeVideoId));
+        player.hidden = false;
+      }
+      document.title = "A Gift for " + gift.recipient + " | Seemani";
+    } catch (error) {
+      document.getElementById("viewTitle").textContent = "This gift link isn't available";
+      document.getElementById("viewMessage").textContent = error.message || "Please check the link and try again.";
+    }
+  }
+  form.addEventListener("submit", async event => {
+    event.preventDefault();
+    statusBox.classList.remove("show");
+    result.classList.remove("show");
+    if (API_BASE.includes("REPLACE-WITH-YOUR-WORKER")) {
+      showStatus("The gift API needs to be deployed first. Follow serverless/README.md, then set API_BASE in this page.", true);
+      return;
+    }
+    const formData = new FormData(form);
+    const payload = Object.fromEntries(formData.entries());
+    createBtn.disabled = true;
+    createBtn.textContent = "Creating your gift…";
+    try {
+      const response = await fetch(API_BASE + "/api/gifts", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      });
+      const data = await response.json();
+      if (!response.ok || !data.ok) throw new Error(data.error || "Could not create your gift");
+      const shareUrl = new URL("https://seemani.in/gift/");
+      shareUrl.searchParams.set("id", data.id);
+      document.getElementById("shareUrl").value = shareUrl.toString();
+      document.getElementById("openGift").href = shareUrl.toString();
+      result.classList.add("show");
+      showStatus("Your gift page has been saved successfully.");
+    } catch (error) {
+      showStatus(error.message || "Could not connect to the gift service. Please try again.", true);
+    } finally {
+      createBtn.disabled = false;
+      createBtn.textContent = "Create my shareable gift ✨";
+    }
+  });
+  document.getElementById("copyBtn").addEventListener("click", async () => {
+    const field = document.getElementById("shareUrl");
+    try { await navigator.clipboard.writeText(field.value); document.getElementById("copyBtn").textContent = "Copied ✓"; }
+    catch { field.select(); document.execCommand("copy"); }
+  });
+  const giftId = new URLSearchParams(location.search).get("id");
+  if (giftId) loadGift(giftId);
+</script>
+</body>
+</html>
