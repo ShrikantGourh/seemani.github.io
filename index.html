@@ -54,7 +54,7 @@
   </header>
   <main>
     <section class="dussehra-strip" aria-label="Create a Dussehra greeting"><div class="dussehra-strip-art">🏹 ✨</div><div class="dussehra-strip-copy"><p>✨ A FESTIVE LITTLE SURPRISE ✨</p><h2>Send a <em>Dussehra</em> wish</h2><span>A tiny Ravana story, made just for someone special.</span></div><form id="dussehra-form" class="dussehra-form"><label><span>For</span><input id="dussehra-to" maxlength="48" required placeholder="Their name"></label><label><span>From</span><input id="dussehra-from" maxlength="48" required placeholder="Your name"></label><button type="submit">Create wish ↗</button></form><div id="dussehra-share" class="dussehra-share" hidden><label for="dussehra-share-url">Your shareable wish link</label><div class="dussehra-share-row"><input id="dussehra-share-url" readonly aria-label="Shareable Dussehra wish URL"><button id="dussehra-copy" type="button">Copy link</button><button id="dussehra-native-share" type="button">Share ↗</button></div><p>Anyone opening this link will see your names and the animated Dussehra story.</p></div></section>
-    <section id="dussehra-story" class="dussehra-story" hidden><div class="dussehra-story-head"><p>THE TEN-HEADED GIGGLE</p><h2>Scroll to tell the <em>Dussehra story</em></h2><span>Watch the magic unfold as you scroll.</span></div><button id="dussehra-play" class="dussehra-play" type="button">▶ Play the story</button><div class="dussehra-scroll-track" id="dussehra-track"><div class="dussehra-sticky"><img class="dussehra-gif" src="serverless/seemani_ravana_dussehra.gif" alt="Animated Ravana Dussehra greeting" loading="eager"><div class="dussehra-moon"></div><div class="dussehra-festive-lights">✦　·　✧　·　✦　·　✧　·　✦</div><div class="dussehra-ravana"><div class="dussehra-heads" id="dussehra-heads"></div><div class="dussehra-body"><span class="ravana-crown">♛</span><span class="ravana-face">😆</span><span class="ravana-tummy">✦</span></div><div class="dussehra-arrow" id="dussehra-arrow">➶</div></div><div class="dussehra-comic" id="dussehra-comic"><span class="comic-stars">✦ ✧ ✦</span><strong id="dussehra-message">Happy Dussehra!</strong><small id="dussehra-signoff">With festive wishes ♡</small></div><p class="dussehra-scroll-hint" id="dussehra-hint">↓ SCROLL TO MAKE MAGIC ↓</p><div class="dussehra-ground"></div></div></div><p class="dussehra-story-end">May goodness win, laughter stay, and your year shine bright. ✨</p><div class="dussehra-create-own"><p>Want to surprise someone your own way?</p><a href="gifts/#collections" class="dussehra-own-btn">Create your own <span aria-hidden="true">↗</span></a></div></section>
+
     <section class="hero">
       <div class="hero-copy">
         <p class="eyebrow"><span class="eyebrow-dot"></span> MADE FOR THE ONE WHO HAS YOUR HEART</p>
@@ -115,8 +115,10 @@
   </style>
   <script>
   (() => {
-    const form=document.getElementById('dussehra-form'), story=document.getElementById('dussehra-story'), track=document.getElementById('dussehra-track'), heads=document.getElementById('dussehra-heads'), msg=document.getElementById('dussehra-message'), sign=document.getElementById('dussehra-signoff'), play=document.getElementById('dussehra-play');
-    if(!form||!story||!track||!heads)return;
+    const form=document.getElementById('dussehra-form');
+    if(!form)return;
+    form.addEventListener('submit',e=>{e.preventDefault();const to=document.getElementById('dussehra-to').value.trim(),from=document.getElementById('dussehra-from').value.trim();if(!to||!from)return;const q=new URLSearchParams({to,from});window.location.href='/dusshera/?'+q.toString()});
+    return;
     const faces=['😆','😜','😹','😏','😂','😈','🤭','😎','😝','🤣'];
     faces.forEach((face,i)=>{const h=document.createElement('span');h.className='dussehra-head';h.textContent=face;h.style.setProperty('--fall-x',((i%2?1:-1)*(22+(i%4)*13))+'px');h.style.setProperty('--fall-r',((i%2?1:-1)*(45+(i%3)*25))+'deg');h.setAttribute('aria-label','Ravana head '+(i+1));heads.appendChild(h)});
     let animFrame=0, autoTimer=null, generated=false;
