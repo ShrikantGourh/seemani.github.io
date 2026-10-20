@@ -1,0 +1,68 @@
+(() => {
+  const grid = document.getElementById("product-grid");
+  const search = document.getElementById("search");
+  const filters = [...document.querySelectorAll(".filter")];
+  const note = document.getElementById("catalog-note");
+  let products = [];
+  let category = "all";
+
+  const palettes = {
+    birthday: ["#ffe5d9", "#f7d2d8"], love: ["#f9dce7", "#f4e2ef"],
+    memories: ["#e7e5fa", "#f3e5f0"], anniversary: ["#f7dce2", "#f7e9d9"],
+    friends: ["#dff0e8", "#e6e6fb"], family: ["#fae7cf", "#f7dce5"]
+  };
+
+  function escapeHTML(value) {
+    return String(value ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+  }
+
+  function card(product) {
+    const colors = palettes[product.theme] || palettes.birthday;
+    const available = product.status === "available";
+    const label = product.badge || product.category;
+    const url = product.url || "mailto:hello@seemani.in";
+    const action = available ? "Create your gift" : (product.status === "preview" ? "Ask about this gift" : "Coming soon");
+    return `<article class="product-card">
+      <div class="product-art" style="background:linear-gradient(135deg,${colors[0]},${colors[1]})">
+        <span class="product-label">${escapeHTML(label)}</span><span class="product-emoji" aria-hidden="true">${escapeHTML(product.emoji || "🎁")}</span>
+      </div>
+      <div class="product-info"><h3>${escapeHTML(product.title)}</h3><p>${escapeHTML(product.description)}</p>
+        <div class="product-bottom"><span class="price ${product.priceLabel === "Free" ? "free" : ""}">${escapeHTML(product.priceLabel || "Explore")}</span>
+        <a class="product-link" href="${escapeHTML(url)}">${action} <span aria-hidden="true">↗</span></a></div>
+      </div>
+    </article>`;
+  }
+
+  function render() {
+    const term = search.value.trim().toLowerCase();
+    const visible = products.filter(p => (category === "all" || p.category === category) &&
+      [p.title, p.description, p.category, p.badge].some(v => String(v || "").toLowerCase().includes(term)));
+    grid.innerHTML = visible.length ? visible.map(card).join("") :
+      '<div class="empty-state">No gifts match that search yet. Try another word or choose “All gifts”.</div>';
+    note.textContent = products.length ? "New ideas and thoughtful surprises will be added as Seemani grows." : "We couldn't load the catalogue. Please refresh the page.";
+  }
+
+  filters.forEach(button => button.addEventListener("click", () => {
+    category = button.dataset.category;
+    filters.forEach(item => {
+      const active = item === button;
+      item.classList.toggle("active", active);
+      item.setAttribute("aria-pressed", String(active));
+    });
+    render();
+  }));
+  search.addEventListener("input", render);
+  document.getElementById("year").textContent = new Date().getFullYear();
+
+  fetch("./products.json", { headers: { "Accept": "application/json" } })
+    .then(response => { if (!response.ok) throw new Error("Catalogue unavailable"); return response.json(); })
+    .then(data => {
+      if (!Array.isArray(data)) throw new Error("Invalid catalogue");
+      products = data;
+      render();
+    })
+    .catch(() => {
+      grid.innerHTML = '<div class="empty-state">Our gift collection is taking a little break. Please try again soon.</div>';
+      note.textContent = "If the issue continues, contact hello@seemani.in.";
+    });
+})();
