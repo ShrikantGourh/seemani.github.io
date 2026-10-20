@@ -16,11 +16,17 @@
     return String(value ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
   }
 
+  function sitePath(path) {
+    if (!path || !path.startsWith("/")) return path || "mailto:hello@seemani.in";
+    const prefix = location.hostname === "shrikantgourh.github.io" ? "/seemani.github.io" : "";
+    return prefix + path;
+  }
+
   function card(product) {
     const colors = palettes[product.theme] || palettes.birthday;
     const available = product.status === "available";
     const label = product.badge || product.category;
-    const url = product.url || "mailto:hello@seemani.in";
+    const url = sitePath(product.url || "mailto:hello@seemani.in");
     const action = available ? "Create your gift" : (product.status === "preview" ? "Ask about this gift" : "Coming soon");
     return `<article class="product-card">
       <div class="product-art" style="background:linear-gradient(135deg,${colors[0]},${colors[1]})">
@@ -54,7 +60,11 @@
   search.addEventListener("input", render);
   document.getElementById("year").textContent = new Date().getFullYear();
 
-  fetch("./products.json", { headers: { "Accept": "application/json" } })
+  const scriptUrl = document.currentScript && document.currentScript.src
+    ? document.currentScript.src
+    : new URL("store.js", location.href).href;
+  const catalogueUrl = new URL("products.json", scriptUrl);
+  fetch(catalogueUrl, { headers: { "Accept": "application/json" } })
     .then(response => { if (!response.ok) throw new Error("Catalogue unavailable"); return response.json(); })
     .then(data => {
       if (!Array.isArray(data)) throw new Error("Invalid catalogue");
